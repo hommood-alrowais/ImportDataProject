@@ -1,0 +1,46 @@
+---
+title: "Testing PPT second"
+output: powerpoint_presentation
+date: "2024-09-16"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R Markdown
+
+library("ggplot2") library(readxl) library(tidyverse)
+
+library(dplyr) library(lubridate) library(readr)
+
+# Load the data
+
+HQTest \<- read_excel("DemographicsHQTEST.xlsx")
+
+HQTest \<- HQTest%\>% \# If I wanted to Add 5+ on EmrID column:
+mutate(EmrID = EmrID + 5, ##Changing the Surname column to uppercase
+Surname = toupper(Surname), #Adding a column for age using their birth
+date until today Age = floor(interval(`Birth date`, today()) /
+years(1)))
+
+## Slide with Bullets
+
+-   Bullet 1
+-   Bullet 2
+-   Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```

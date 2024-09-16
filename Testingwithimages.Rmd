@@ -1,0 +1,40 @@
+---
+title: "My PowerPoint Presentation"
+output: powerpoint_presentation
+date: "2024-09-16"
+---
+
+## Introduction
+
+This presentation includes images with legends.
+
+## Slide with Image and Legend
+
+This slide contains an image with a legend.
+
+```{r plot_with_legend, echo=FALSE, fig.height=5, fig.width=7,warning=FALSE}
+library(ggplot2)
+
+# Create a sample plot
+data <- data.frame(
+  x = rnorm(100),
+  y = rnorm(100),
+  category = sample(c("A", "B"), 100, replace = TRUE)
+)
+
+# Plot with legend
+ggplot(data, aes(x = x, y = y, color = category)) +
+  geom_point() +
+  labs(title = "Scatter Plot with Legend", x = "X Axis", y = "Y Axis") +
+  scale_color_manual(values = c("A" = "blue", "B" = "red")) +
+  theme_minimal()
+```
+
+
+## Slide with External Image
+
+This slide includes an external image with a legend.
+
+![Legend for Image](HistogramofAges.png)
+
+**Legend**: Description of the image here.

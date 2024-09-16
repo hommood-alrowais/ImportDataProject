@@ -1,0 +1,26 @@
+---
+title: "Sample Histogram"
+output: powerpoint_presentation
+date: "2024-09-16"
+---
+
+## Slide with Sample Histogram
+
+This slide shows a histogram of sample data.
+
+```{r, echo=FALSE, fig.height=5, fig.width=7}
+# Load necessary libraries
+
+library(ggplot2)
+
+# Load the data
+HQTest <- read_excel("DemographicsHQTEST.xlsx")
+
+# Create sample data
+sample_data <- data.frame(Age = rnorm(100, mean = 50, sd = 10))
+
+# Create the Age Histogram
+ggplot(sample_data, aes(x = Age)) + 
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Sample Ages", x = "Age", y = "Frequency") +
+  theme_minimal()

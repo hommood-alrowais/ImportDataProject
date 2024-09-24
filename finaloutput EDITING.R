@@ -212,32 +212,93 @@ print(ppt, target = "updated_presentation_with_date.pptx")
 
 
 
-#Testing another way to to a plot in ppt 
 
-# Install and load required packages
-# install.packages("officer")
-install.packages("rvg")
-library(officer)
-library(rvg)
-library(ggplot2)
-
-# Create a ggplot plot
-data <- data.frame(age = rnorm(100, mean = 30, sd = 10))
-p <- ggplot(data, aes(x = age)) +
-  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
-  labs(title = "Histogram of Ages", x = "Age", y = "Frequency")
+# Go to slide 8
+ppt <- on_slide(ppt, index = 8)
 
 
-# Go to slide 7
+# Add the logo (adjust position and size as needed)
+ppt <- ph_with(ppt, external_img("instagram.png", width = 0.5, height = 0.5,), 
+               location = ph_location(left = 9, top = 4))
+
+# Add the text (adjust position to align with the image)
+ppt <- ph_with(ppt, value = "Partnership with Apple", 
+               location = ph_location(left = 10, top = 4))
+
+# Save the PowerPoint
+print(ppt, target = "updated_presentation_with_date.pptx")
+
+
+
+
+# Now select the second slide
 ppt <- on_slide(ppt, index = 7)
 
 
-# Add a slide and include the ggplot as an editable vector graphic
-ppt <- add_slide(ppt, layout = "Title and Content", master = "Office Theme")
-ppt <- ph_with_vg(ppt, code = print(p), type = "body")
+# Define paragraph properties with custom line spacing (e.g., 1.5)
+line_spacing_prop <- fp_par(line_spacing = 1.58)
 
-# Save the PowerPoint file
-print(ppt, target = "presentation_with_ggplot.pptx")
+# Define the title using fpar() and ftext() for consistent formatting and spacing
+formatted_title <- fpar(
+  ftext("100 IPADS", 
+        prop = fp_text(font.size = 35, bold = FALSE, color = "black", font.family = "Garnett 1")),
+  
+  ftext("\n100 COMPUTERS", 
+        prop = fp_text(font.size = 35, bold = TRUE, color = "black", font.family = "Garnett 1")),
+  
+  ftext("\n100 COMPUTERS", 
+        prop = fp_text(font.size = 35, bold = TRUE, color = "black", font.family = "Garnett 1")),
+  
+  ftext("\n100 COMPUTERS", 
+        prop = fp_text(font.size = 35, bold = TRUE, color = "black", font.family = "Garnett 1")),
+  
+  ftext("\n100 COMPUTERS", 
+        prop = fp_text(font.size = 35, bold = TRUE, color = "black", font.family = "Garnett 1")),
+  
+  ftext("\n100 COMPUTERS", 
+        prop = fp_text(font.size = 35, bold = TRUE, color = "black", font.family = "Garnett 1")),
+  
+  fp_p = line_spacing_prop  # Apply line spacing to the whole paragraph
+)
 
-# Now save the final version of the presentation
+
+# Add the formatted title to slide 2 at the specified location
+ppt <- ph_with(ppt, value = formatted_title, 
+               location = ph_location(left = 13, top = 3.5, width = 6, height = 1))
+
+# Save the final version of the presentation
 print(ppt, target = "updated_presentation_with_date.pptx")
+
+
+
+
+
+
+
+# Reshape the data into a matrix format
+table_matrix <- tapply(data$text, 
+                       list(row_id = data$row_id, 
+                            cell_id = data$cell_id
+                       ), FUN = I )
+
+# Convert to data frame
+table_df <- as.data.frame(table_matrix, stringsAsFactors = FALSE)
+
+# If flextable is installed, create the table
+library(flextable)
+
+# Convert the matrix or data frame to a flextable
+my_flextable <- flextable(table_df)
+
+# Optionally, format the table (adjust column widths, add borders, etc.)
+my_flextable <- autofit(my_flextable)
+
+# Create a new PowerPoint slide and add the table
+library(officer)
+
+ppt <- read_pptx() %>%
+  add_slide(layout = "Title and Content", master = "Office Theme") %>%
+  ph_with(my_flextable, location = ph_location_type(type = "body"))
+
+# Save the PowerPoint
+print(ppt, target = "table_presentation.pptx")

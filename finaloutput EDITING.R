@@ -301,4 +301,138 @@ ppt <- read_pptx() %>%
   ph_with(my_flextable, location = ph_location_type(type = "body"))
 
 # Save the PowerPoint
-print(ppt, target = "table_presentation.pptx")
+print(ppt, target = "updated_presentation_with_date.pptx")
+
+
+
+#Creating tables with R.
+
+library(officer)
+library(flextable)
+
+
+# Load the existing PowerPoint file
+pptx <- read_pptx("updated_presentation_with_date.pptx") # Replace with your actual file path
+
+
+# Navigate to slide 9
+pptx <- on_slide(pptx, index = 9)
+
+# Create a sample table
+data <- data.frame(
+  Column1 = c("Row1", "Row2", "Row3"),
+  Column2 = c(10, 20, 30)
+)
+flextable_obj <- flextable(data)
+
+# Add the table to the slide
+pptx <- ph_with(
+  pptx,
+  value = flextable_obj,
+  location = ph_location_type(type = "body") # Adjust location as needed
+)
+
+
+# Save the PowerPoint
+print(ppt, target = "updated_presentation_with_date.pptx")
+
+library(rvg)
+
+#install.packages("rvg")
+
+
+library(officer)
+library(rvg)
+
+# Load your ex# Load your existing PowerPoint presentation
+pptx <- read_pptx("updated_presentation_with_date.pptx")
+
+# Check layout for slide 11 (optional, for debugging)
+layout_summary(pptx)
+
+# Go to slide 11
+pptx <- on_slide(pptx, index = 11)
+
+# Ensure the title placeholder exists (adjust as necessary)
+pptx <- ph_with(pptx, "Column Chart Example", location = ph_location_type(type = "title"))
+
+# Insert the column chart using ph_with_vg_at()
+pptx <- ph_with_vg_at(
+  pptx,
+  code = {
+    # Example dataset (mtcars dataset)
+    barplot(
+      table(mtcars$cyl),  # Create a bar chart of the 'cyl' column (cylinder count)
+      main = "Count of Cars by Cylinder",
+      xlab = "Number of Cylinders",
+      ylab = "Frequency",
+      col = "blue",  # Color for the columns
+      border = "black",  # Border color for the columns
+      ylim = c(0, 15)  # Set y-axis limit for better presentation
+    )
+  },
+  left = 1, top = 1.5, width = 8, height = 4  # Specify location and size on the slide
+
+
+# Save the PowerPoint
+print(pptx, target = "updated_presentation_with_date.pptx")isting PowerPoint presentation
+pptx <- read_pptx("updated_presentation_with_date.pptx")
+
+# Go to slide 11
+pptx <- on_slide(pptx, index = 11)
+
+# Add a title to the slide
+pptx <- ph_with(pptx, "Column Chart Example", 
+                # Load your existing PowerPoint presentation
+pptx <- read_pptx("updated_presentation_with_date.pptx")
+
+# Check layout for slide 11 (optional, for debugging)
+layout_summary(pptx)
+
+# Go to slide 11
+pptx <- on_slide(pptx, index = 11)
+
+# Ensure the title placeholder exists (adjust as necessary)
+pptx <- ph_with(pptx, "Column Chart Example", location = ph_location_type(type = "title"))
+
+# Insert the column chart using ph_with_vg_at()
+pptx <- ph_with_vg_at(
+  pptx,
+  code = {
+    # Example dataset (mtcars dataset)
+    barplot(
+      table(mtcars$cyl),  # Create a bar chart of the 'cyl' column (cylinder count)
+      main = "Count of Cars by Cylinder",
+      xlab = "Number of Cylinders",
+      ylab = "Frequency",
+      col = "blue",  # Color for the columns
+      border = "black",  # Border color for the columns
+      ylim = c(0, 15)  # Set y-axis limit for better presentation
+    )
+  },
+  left = 1, top = 1.5, width = 8, height = 4  # Specify location and size on the slide
+)
+
+# Save the PowerPoint
+print(pptx, target = "updated_presentation_with_date.pptx")location = ph_location_type(type = "title"))
+
+# Insert the column chart using ph_with_vg_at()
+pptx <- ph_with_vg_at(
+  pptx,
+  code = {
+    # Example dataset (mtcars dataset)
+    barplot(
+      table(mtcars$cyl),  # Create a bar chart of the 'cyl' column (cylinder count)
+      main = "Count of Cars by Cylinder",
+      xlab = "Number of Cylinders",
+      ylab = "Frequency",
+      col = "blue",  # Color for the columns
+      border = "black",  # Border color for the columns
+      ylim = c(0, 15)  # Set y-axis limit for better presentation
+    )
+  },
+  left = 1, top = 1.5, width = 8, height = 4  # Specify location and size on the slide
+)
+
+# Save the PowerPoint
+print(pptx, target = "updated_presentation_with_date.pptx")

@@ -1,16 +1,10 @@
-#install.packages("officer") 
-#install.packages ("ggplot2")
-#install.packages ("dplyr")
-#install.packages ("lubridate")
-
-library(officer) 
+library(officer)
 library(ggplot2)
 library(dplyr)
 library(lubridate)
 
-
+# Open the PowerPoint presentation
 ppt <- read_pptx("C:\\Users\\DataIntern\\HQToronto\\Shared Docs - General\\Clinical Reporting\\ReportingProjects\\DataIntern\\ImportDataProject\\FINALOUTPUT.pptx")
-
 
 # Select the first slide
 ppt <- on_slide(ppt, index = 1)
@@ -26,38 +20,48 @@ formatted_text <- fpar(
   ftext(formatted_date, prop = date_style)
 )
 
-# Add the formatted date text to slide 1 at a specific location
-ppt <- ph_with(ppt, value = formatted_date, 
-               location = ph_location(left = 12.8, top = 9, width = 5, height = 1))
+# Add the formatted date text without a bullet point using `ph_with()`
+# Add `level` argument set to 0 to avoid bullets
+ppt <- ph_with(ppt, value = formatted_text, 
+               location = ph_location(left = 12.8, top = 9, width = 5, height = 1),
+               level = 0)
 
 # Save the presentation after adding the date to slide 1
 print(ppt, target = "updated_presentation_with_date.pptx")
 
 
-#ppt <- ph_with(ppt, value = formatted_text, 
-# location = ph_location(left = 12.8, top = 9, width = 5, height = 1))
-# Get the current month and year dynamically
-#formatted_date <- format(Sys.Date(), "%B %Y")
-
-
+####Moving to the second slide
 
 # Select the second slide
 ppt <- on_slide(ppt, index = 2)
 
+# Formatting the date to today's date
+formatted_date <- format(Sys.Date(), "%B %Y")
 
-# Add the new dynamic date in "TextBox 6" with the dynamic date (formatted_date)
-ppt <- ph_with(ppt, value = formatted_date, 
-               location = ph_location(left = 4.4471861, top = 3.253519, width = 3.662061461, height = 0.4251717))
+# Define text formatting for the date
+date_style <- fp_text(font.size = 35, font.family = "Garnett 2", bold = FALSE, color = "black")
+
+# Create a formatted text object using fpar() and ftext()
+formatted_text <- fpar(
+  ftext(formatted_date, prop = date_style)
+)
+
+# Add the formatted date text without a bullet point using `ph_with()`
+# Add `level` argument set to 0 to avoid bullets
+ppt <- ph_with(ppt, value = formatted_text, 
+               location = ph_location(left = 4.4471861, top = 3.253519, width = 3.662061461, height = 0.4251717),
+               level = 0)
 
 # Save the modified presentation
 print(ppt, target = "updated_presentation_with_date.pptx")
 
 
-# Now move to the second slide
+
+# Going to the second slide
 ppt <- on_slide(ppt, index = 2)
 
-# Check slide summary (optional)
-# slide_summary(ppt)
+#Check slide summary (optional)
+#slide_summary(ppt)
 
 
 # Define multi-line formatted text with font size adjustments
@@ -105,7 +109,7 @@ print(ppt, target = "updated_presentation_with_date.pptx")
 
 
 
-# Now select the second slide
+# Now select slide 5
 ppt <- on_slide(ppt, index = 5)
 
 
@@ -125,7 +129,7 @@ print(ppt, target = "updated_presentation_with_date.pptx")
 
 
 
-# Now select the second slide
+# Now select slide 5
 ppt <- on_slide(ppt, index = 5)
 
 
@@ -139,7 +143,7 @@ formatted_title <- fpar(
   
 )
 
-# Add the formatted title to slide 2 at the specified location
+# Add the formatted title to slide 5 at the specified location
 ppt <- ph_with(ppt, value = formatted_title, 
                location = ph_location(left = 13, top = 8, width = 6, height = 1))
 
@@ -213,25 +217,7 @@ print(ppt, target = "updated_presentation_with_date.pptx")
 
 
 
-# Go to slide 8
-ppt <- on_slide(ppt, index = 8)
-
-
-# Add the logo (adjust position and size as needed)
-ppt <- ph_with(ppt, external_img("instagram.png", width = 0.5, height = 0.5,), 
-               location = ph_location(left = 9, top = 4))
-
-# Add the text (adjust position to align with the image)
-ppt <- ph_with(ppt, value = "Partnership with Apple", 
-               location = ph_location(left = 10, top = 4))
-
-# Save the PowerPoint
-print(ppt, target = "updated_presentation_with_date.pptx")
-
-
-
-
-# Now select the second slide
+# Now select slide 7
 ppt <- on_slide(ppt, index = 7)
 
 
@@ -272,35 +258,42 @@ print(ppt, target = "updated_presentation_with_date.pptx")
 
 
 
-
-
-
-# Reshape the data into a matrix format
-table_matrix <- tapply(data$text, 
-                       list(row_id = data$row_id, 
-                            cell_id = data$cell_id
-                       ), FUN = I )
-
-# Convert to data frame
-table_df <- as.data.frame(table_matrix, stringsAsFactors = FALSE)
-
-# If flextable is installed, create the table
+# Load necessary libraries
+library(officer)
 library(flextable)
+library(dplyr)
 
-# Convert the matrix or data frame to a flextable
-my_flextable <- flextable(table_df)
+
+# Select slide 9 in the existing presentation
+ppt <- on_slide(ppt, index = 9)
+
+# Create fake health data for demonstration purposes
+set.seed(123)  # Set seed for reproducibility
+
+# Generate a data frame with health-related columns
+health_data <- data.frame(
+  Name = paste("Person", 1:10),                       # Person names
+  Age = sample(25:65, 10, replace = TRUE),             # Random ages between 25 and 65
+  Height_cm = round(runif(10, 150, 190), 1),           # Random height between 150 and 190 cm
+  Weight_kg = round(runif(10, 50, 90), 1),             # Random weight between 50 and 90 kg
+  BMI = round(runif(10, 18, 30), 1)                    # Random BMI between 18 and 30
+)
+
+# Print the health data (optional)
+print(health_data)
+
+# Convert the health data to a flextable
+health_flextable <- flextable(health_data)
 
 # Optionally, format the table (adjust column widths, add borders, etc.)
-my_flextable <- autofit(my_flextable)
+health_flextable <- autofit(health_flextable)
 
-# Create a new PowerPoint slide and add the table
-library(officer)
+# Add the flextable to slide 9 at a specified location
+ppt <- ph_with(ppt, value = health_flextable, 
+               location = ph_location(left = 1, top = 1, width = 8, height = 5))
 
-ppt <- read_pptx() %>%
-  add_slide(layout = "Title and Content", master = "Office Theme") %>%
-  ph_with(my_flextable, location = ph_location_type(type = "body"))
 
-# Save the PowerPoint
+# Save the modified PowerPoint presentation
 print(ppt, target = "updated_presentation_with_date.pptx")
 
 
@@ -309,130 +302,39 @@ print(ppt, target = "updated_presentation_with_date.pptx")
 
 library(officer)
 library(flextable)
+library(dplyr)
 
 
-# Load the existing PowerPoint file
-pptx <- read_pptx("updated_presentation_with_date.pptx") # Replace with your actual file path
 
+# Select slide 11
+ppt <- on_slide(ppt, index = 11)
 
-# Navigate to slide 9
-pptx <- on_slide(pptx, index = 9)
+# Generate random health data for the table
+set.seed(123)  # Set seed for reproducibility
+names <- paste("Person", 1:10)  # Names of the persons
+ages <- sample(25:65, 10, replace = TRUE)  # Random ages between 25 and 65
+heights <- round(runif(10, 150, 190), 1)  # Random height between 150 and 190 cm
+weights <- round(runif(10, 50, 90), 1)  # Random weight between 50 and 90 kg
+bmi <- round(weights / ((heights / 100) ^ 2), 1)  # Calculate BMI
 
-# Create a sample table
-data <- data.frame(
-  Column1 = c("Row1", "Row2", "Row3"),
-  Column2 = c(10, 20, 30)
+# Create a data frame for health data
+health_data <- data.frame(
+  Name = names,
+  Age = ages,
+  Height_cm = heights,
+  Weight_kg = weights,
+  BMI = bmi
 )
-flextable_obj <- flextable(data)
 
-# Add the table to the slide
-pptx <- ph_with(
-  pptx,
-  value = flextable_obj,
-  location = ph_location_type(type = "body") # Adjust location as needed
-)
+# Convert the health data to a flextable
+health_flextable <- flextable(health_data)
 
+# Optionally, format the table (adjust column widths, add borders, etc.)
+health_flextable <- autofit(health_flextable)
 
-# Save the PowerPoint
+# Add the flextable to slide 9 at a specified location
+ppt <- ph_with(ppt, value = health_flextable, 
+               location = ph_location(left = 8, top = 3, width = 8, height = 5))
+
+# Save the modified PowerPoint presentation
 print(ppt, target = "updated_presentation_with_date.pptx")
-
-library(rvg)
-
-#install.packages("rvg")
-
-
-library(officer)
-library(rvg)
-
-# Load your ex# Load your existing PowerPoint presentation
-pptx <- read_pptx("updated_presentation_with_date.pptx")
-
-# Check layout for slide 11 (optional, for debugging)
-layout_summary(pptx)
-
-# Go to slide 11
-pptx <- on_slide(pptx, index = 11)
-
-# Ensure the title placeholder exists (adjust as necessary)
-pptx <- ph_with(pptx, "Column Chart Example", location = ph_location_type(type = "title"))
-
-# Insert the column chart using ph_with_vg_at()
-pptx <- ph_with_vg_at(
-  pptx,
-  code = {
-    # Example dataset (mtcars dataset)
-    barplot(
-      table(mtcars$cyl),  # Create a bar chart of the 'cyl' column (cylinder count)
-      main = "Count of Cars by Cylinder",
-      xlab = "Number of Cylinders",
-      ylab = "Frequency",
-      col = "blue",  # Color for the columns
-      border = "black",  # Border color for the columns
-      ylim = c(0, 15)  # Set y-axis limit for better presentation
-    )
-  },
-  left = 1, top = 1.5, width = 8, height = 4  # Specify location and size on the slide
-
-
-# Save the PowerPoint
-print(pptx, target = "updated_presentation_with_date.pptx")isting PowerPoint presentation
-pptx <- read_pptx("updated_presentation_with_date.pptx")
-
-# Go to slide 11
-pptx <- on_slide(pptx, index = 11)
-
-# Add a title to the slide
-pptx <- ph_with(pptx, "Column Chart Example", 
-                # Load your existing PowerPoint presentation
-pptx <- read_pptx("updated_presentation_with_date.pptx")
-
-# Check layout for slide 11 (optional, for debugging)
-layout_summary(pptx)
-
-# Go to slide 11
-pptx <- on_slide(pptx, index = 11)
-
-# Ensure the title placeholder exists (adjust as necessary)
-pptx <- ph_with(pptx, "Column Chart Example", location = ph_location_type(type = "title"))
-
-# Insert the column chart using ph_with_vg_at()
-pptx <- ph_with_vg_at(
-  pptx,
-  code = {
-    # Example dataset (mtcars dataset)
-    barplot(
-      table(mtcars$cyl),  # Create a bar chart of the 'cyl' column (cylinder count)
-      main = "Count of Cars by Cylinder",
-      xlab = "Number of Cylinders",
-      ylab = "Frequency",
-      col = "blue",  # Color for the columns
-      border = "black",  # Border color for the columns
-      ylim = c(0, 15)  # Set y-axis limit for better presentation
-    )
-  },
-  left = 1, top = 1.5, width = 8, height = 4  # Specify location and size on the slide
-)
-
-# Save the PowerPoint
-print(pptx, target = "updated_presentation_with_date.pptx")location = ph_location_type(type = "title"))
-
-# Insert the column chart using ph_with_vg_at()
-pptx <- ph_with_vg_at(
-  pptx,
-  code = {
-    # Example dataset (mtcars dataset)
-    barplot(
-      table(mtcars$cyl),  # Create a bar chart of the 'cyl' column (cylinder count)
-      main = "Count of Cars by Cylinder",
-      xlab = "Number of Cylinders",
-      ylab = "Frequency",
-      col = "blue",  # Color for the columns
-      border = "black",  # Border color for the columns
-      ylim = c(0, 15)  # Set y-axis limit for better presentation
-    )
-  },
-  left = 1, top = 1.5, width = 8, height = 4  # Specify location and size on the slide
-)
-
-# Save the PowerPoint
-print(pptx, target = "updated_presentation_with_date.pptx")
